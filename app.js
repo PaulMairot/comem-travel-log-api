@@ -17,9 +17,20 @@ app.use(connectLogger(expressLogger, { level: 'trace' }));
 // Parse the body of JSON requests
 app.use(express.json());
 
+let whitelist = ['http://localhost:8100', 'capacitor://localhost']
+let corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 // Allow CORS (if enabled)
 if (config.cors) {
-  app.use(cors());
+  app.use(cors(corsOptions));
   expressLogger.debug('CORS is enabled');
 } else {
   expressLogger.debug('CORS is disabled');
