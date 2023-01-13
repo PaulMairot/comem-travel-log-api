@@ -17,19 +17,9 @@ app.use(connectLogger(expressLogger, { level: 'trace' }));
 // Parse the body of JSON requests
 app.use(express.json());
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:8100");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-  next();
-});
-
-// Allow CORS (if enabled)
-if (config.cors) {
-  app.use(cors());
-  expressLogger.debug('CORS is enabled');
-} else {
-  expressLogger.debug('CORS is disabled');
-}
+app.use(cors({
+  origin: 'http://localhost:8100'
+}));
 
 // Plug in the API
 app.use('/api', apiRouter);
