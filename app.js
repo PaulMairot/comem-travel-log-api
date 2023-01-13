@@ -17,8 +17,18 @@ app.use(connectLogger(expressLogger, { level: 'trace' }));
 // Parse the body of JSON requests
 app.use(express.json());
 
+var allowedOrigins = ['http://localhost:8100',
+                      'capacitor://localhost'];
 app.use(cors({
-  origin: 'http://localhost:8100'
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
 }));
 
 // Plug in the API
