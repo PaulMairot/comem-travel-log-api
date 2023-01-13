@@ -17,13 +17,7 @@ app.use(connectLogger(expressLogger, { level: 'trace' }));
 // Parse the body of JSON requests
 app.use(express.json());
 
-// Allow CORS (if enabled)
-if (config.cors) {
-  app.use(cors());
-  expressLogger.debug('CORS is enabled');
-} else {
-  expressLogger.debug('CORS is disabled');
-}
+
 
 // Plug in the API
 app.use('/api', apiRouter);
